@@ -1,0 +1,102 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"/>
+<title>smartdice</title>
+<link rel="apple-touch-icon" href="icon.png"/>
+<meta property="og:image" content="ss.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<script src="fukuno.js"></script>
+<script>"use strict";
+
+window.onload = function() {
+	var KEY_A = 65;
+	var KEY_Z = 90;
+	var KEY_ESC = 27;
+	
+	var n = KEY_A;
+	var startt;
+	var gaming = false;
+	var tid;
+	document.onkeydown = function(e) {
+		var key = e.keyCode;
+		if (!gaming) {
+			if (key == KEY_A) {
+				startt = new Date().getTime();
+				gaming = true;
+				tid = setInterval(function() {
+					var t = new Date().getTime();
+					get("time").textContent = fixfloat((t - startt) / 1000, 2) + "sec";
+				}, 1000 / 100);
+				n = KEY_A;
+				n++;
+				get("scr").textContent = "B";
+			}
+		} else {
+			if (key == n) {
+				n++;
+				if (n == KEY_Z + 1) {
+					clearInterval(tid);
+					var t = new Date().getTime();
+					get("time").textContent = fixfloat((t - startt) / 1000, 2) + "sec";
+					gaming = false;
+					setTimeout(function() {
+						get("scr").textContent = "A";
+					}, 500);
+				} else {
+					get("scr").textContent = String.fromCharCode(n);
+				}
+			} else if (key == KEY_ESC) {
+				clearInterval(tid);
+				get("time").textContent = "-sec";
+				gaming = false;
+				get("scr").textContent = "A";
+			}
+		}
+	};
+};
+
+</script>
+<style>
+body {
+	margin: 0px;
+	font-family: sans-serif;
+	-webkit-text-size-adjust: none;
+	text-align: center;
+}
+#main {
+	text-align: center;
+}
+#scr {
+	font-size: 80px;
+	margin: 30px;
+	display: block;
+}
+#time {
+	font-size: 40px;
+	margin: 10px;
+	display: block;
+}
+a {
+	color: gray !important;
+}
+#credit {
+	margin: 20px;
+	text-align: center;
+}
+</style>
+</head>
+
+<body>
+
+<h1>A2Z</h1>
+<div>AからZまですばやく打つ（目標タイム10秒）</div>
+
+<div id="main">
+<span id="scr">A</span>
+<span id="time">-sec</span>
+</div>
+
+<div id="credit">
+<a href="http://fukuno.jig.jp/1500">CC BY fukuno.jig.jp 一日一創</a>
+</div>
+
+</body>
+</html>
